@@ -1,19 +1,17 @@
 package com.example.storyapp.data.remote.response
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
 
-data class StoriesResponse(
-
-    @field:SerializedName("listStory") val listStory: List<ListStoryItem?>? = null,
+data class DetailStoryResponse(
 
     @field:SerializedName("error") val error: Boolean? = null,
 
-    @field:SerializedName("message") val message: String? = null
+    @field:SerializedName("message") val message: String? = null,
+
+    @field:SerializedName("story") val story: Story
 )
 
-data class ListStoryItem(
+data class Story(
 
     @field:SerializedName("photoUrl") val photoUrl: String,
 
@@ -23,9 +21,9 @@ data class ListStoryItem(
 
     @field:SerializedName("description") val description: String,
 
-    @field:SerializedName("lon") val lon: Float? = null,
+    @field:SerializedName("lon") val lon: Any? = null,
 
     @field:SerializedName("id") val id: String,
 
-    @field:SerializedName("lat") val lat: Float? = null
+    @field:SerializedName("lat") val lat: Any? = null
 )
