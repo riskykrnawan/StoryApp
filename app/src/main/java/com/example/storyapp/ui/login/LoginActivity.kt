@@ -1,19 +1,19 @@
 package com.example.storyapp.ui.login
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatDelegate
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.ViewModelFactoryDsl
 import com.example.storyapp.R
 import com.example.storyapp.databinding.ActivityLoginBinding
 import com.example.storyapp.helper.SessionPreferences
@@ -44,8 +44,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        playAnimation()
+
+        // viewModel
         val pref = SessionPreferences.getInstance(dataStore)
-        val loginViewModel = obtainViewModel(this@LoginActivity, pref)
+        val factory = ViewModelFactory.getInstance(this@LoginActivity.application, pref)
+        val loginViewModel: LoginViewModel by viewModels{ factory }
 
         loginViewModel.isLoading.observe(this) { loading ->
             showLoading(loading)
@@ -53,8 +57,8 @@ class LoginActivity : AppCompatActivity() {
 
         binding.btnRegisterNow.setOnClickListener {
             val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
-            finish()
         }
 
         binding.btnLogin.setOnClickListener {
@@ -63,16 +67,18 @@ class LoginActivity : AppCompatActivity() {
             loginViewModel.login(email, password)
         }
 
-        loginViewModel.statusCode.observe(this) {
-            if (loginViewModel.statusCode.value == 200) {
+        loginViewModel.statusCode.observe(this) { statusCode ->
+            if (statusCode == 200) {
                 val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                 startActivity(intent)
                 finish()
-            } else {
-                Snackbar.make(
-                    binding.contextView, getString(R.string.login_failed), Snackbar.LENGTH_LONG
-                ).show()
             }
+        }
+
+        loginViewModel.errorMessage.observe(this) {
+            Snackbar.make(
+                binding.contextView, getString(R.string.login_failed), Snackbar.LENGTH_LONG
+            ).show()
         }
 
         binding.edLoginEmail.addTextChangedListener(textWatcher)
@@ -85,15 +91,23 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.isEnabled = Validation.isValidForm(email, password)
     }
 
-
-    private fun obtainViewModel(
-        activity: AppCompatActivity, pref: SessionPreferences
-    ): LoginViewModel {
-        val factory = ViewModelFactory(activity.application, pref)
-        return ViewModelProvider(activity, factory)[LoginViewModel::class.java]
-    }
-
     private fun showLoading(state: Boolean) {
         binding.progressBar.visibility = if (state) View.VISIBLE else View.GONE
+    }
+
+    private fun playAnimation() {
+        val ivLogo = ObjectAnimator.ofFloat(binding.ivLogo, View.ALPHA, 1f).setDuration(300)
+        val btnRegisterNow =
+            ObjectAnimator.ofFloat(binding.btnRegisterNow, View.ALPHA, 1f).setDuration(300)
+        val email =
+            ObjectAnimator.ofFloat(binding.textInputLayoutEmail, View.ALPHA, 1f).setDuration(300)
+        val password =
+            ObjectAnimator.ofFloat(binding.textInputLayoutPassword, View.ALPHA, 1f).setDuration(300)
+        val btnLogin = ObjectAnimator.ofFloat(binding.btnLogin, View.ALPHA, 1f).setDuration(300)
+
+        AnimatorSet().apply {
+            playSequentially(ivLogo, btnRegisterNow, email, password, btnLogin)
+            start()
+        }
     }
 }

@@ -2,10 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/context_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingHorizontal="16dp"
     tools:context=".ui.register.RegisterActivity">
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
@@ -13,15 +15,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         tools:visibility="gone" />
+
     <ImageView
-        android:id="@+id/logo"
+        android:id="@+id/iv_logo"
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:alpha="0"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toTopOf="@id/text_input_layout_name"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,16 +38,18 @@
         android:layout_width="match_parent"
         android:layout_height="49dp"
         android:layout_marginTop="16dp"
+        android:alpha="0"
         android:text="@string/login_now"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo" />
+        app:layout_constraintTop_toBottomOf="@id/iv_logo" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_layout_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:alpha="0"
         android:hint="@string/name"
         app:errorEnabled="true"
         app:helperText="@string/supporting_name"
@@ -51,7 +57,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_login_now"
-        app:startIconContentDescription = "@string/name"
+        app:startIconContentDescription="@string/name"
         app:startIconDrawable="@drawable/ic_person_24">
 
 
@@ -70,6 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:alpha="0"
         android:hint="@string/email"
         app:errorEnabled="true"
         app:helperText="@string/supporting_email"
@@ -96,6 +103,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:alpha="0"
         android:hint="@string/password"
         app:errorEnabled="true"
         app:helperText="@string/supporting_password"
@@ -121,16 +129,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:alpha="0"
+        android:enabled="false"
         android:text="@string/register"
         android:textSize="14sp"
-        android:enabled="false"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_input_layout_password" />
-
-    <View
-        android:id="@+id/context_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

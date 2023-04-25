@@ -2,22 +2,22 @@ package com.example.storyapp.ui.home
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.storyapp.R
 import com.example.storyapp.data.remote.response.ListStoryItem
 import com.example.storyapp.databinding.ActivityHomeBinding
 import com.example.storyapp.helper.SessionPreferences
 import com.example.storyapp.helper.ViewModelFactory
+import com.example.storyapp.ui.add_story.AddStoryActivity
 import com.example.storyapp.ui.login.LoginActivity
 import kotlin.math.absoluteValue
 
@@ -45,6 +45,7 @@ class HomeActivity : AppCompatActivity() {
             homeViewModel.getStories()
         }
 
+        //delete this
         homeViewModel.statusCode.observe(this) {
             if (it.absoluteValue == 401) {
                 val intent = Intent(this@HomeActivity, LoginActivity::class.java)
@@ -61,14 +62,36 @@ class HomeActivity : AppCompatActivity() {
             showLoading(it)
         }
 
+        binding?.fabActionAdd?.setOnClickListener {
+            val intent = Intent(this@HomeActivity, AddStoryActivity::class.java)
+            startActivity(intent)
+        }
+
         showRecyclerItem()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.option_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_logout -> {
+                homeViewModel.deleteSession()
+                val intent = Intent(this@HomeActivity, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun showRecyclerItem() {
         val layoutManager = LinearLayoutManager(this)
         binding?.rvStories?.layoutManager = layoutManager
-        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
-        binding?.rvStories?.addItemDecoration(itemDecoration)
     }
 
     private fun setStoriesData(stories: List<ListStoryItem?>?) {
@@ -92,6 +115,7 @@ class HomeActivity : AppCompatActivity() {
         super.onDestroy()
         _activityHomeBinding = null
     }
+
 
     private fun obtainViewModel(
         activity: AppCompatActivity, pref: SessionPreferences

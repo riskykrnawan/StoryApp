@@ -3,6 +3,7 @@ package com.example.storyapp.helper
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.storyapp.ui.add_story.AddStoryViewModel
 import com.example.storyapp.ui.detail.DetailViewModel
 import com.example.storyapp.ui.home.HomeViewModel
 import com.example.storyapp.ui.login.LoginViewModel
@@ -17,11 +18,13 @@ class ViewModelFactory constructor(
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             return LoginViewModel(pref) as T
         } else if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {
-            return RegisterViewModel(mApplication) as T
+            return RegisterViewModel() as T
         } else if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
-            return HomeViewModel(pref) as T
+            return HomeViewModel(mApplication, pref) as T
         } else if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
             return DetailViewModel(pref) as T
+        } else if (modelClass.isAssignableFrom(AddStoryViewModel::class.java)) {
+            return AddStoryViewModel(pref) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
@@ -32,7 +35,7 @@ class ViewModelFactory constructor(
 
         @JvmStatic
         fun getInstance(application: Application, pref: SessionPreferences): ViewModelFactory {
-            if (INSTANCE == null ) {
+            if (INSTANCE == null) {
                 synchronized(ViewModelFactory::class.java) {
                     INSTANCE = ViewModelFactory(application, pref)
                 }

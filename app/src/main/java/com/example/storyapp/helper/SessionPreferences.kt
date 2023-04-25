@@ -10,34 +10,21 @@ import kotlinx.coroutines.flow.map
 
 class SessionPreferences private constructor(private val dataStore: DataStore<Preferences>) {
 
-    fun getToken(): Flow<String> = dataStore.data
-        .map { preferences ->
-            preferences[TOKEN] ?: ""
-        }
-
-    fun getName(): Flow<String> {
-        return dataStore.data.map { preferences ->
-            preferences[NAME] ?: ""
-        }
-    }
-
-    fun getUserId(): Flow<String> {
-        return dataStore.data.map { preferences ->
-            preferences[USER_ID] ?: ""
-        }
+    fun getToken(): Flow<String> = dataStore.data.map { preferences ->
+        preferences[TOKEN] ?: ""
     }
 
     suspend fun saveSession(user: LoginResponse) {
         dataStore.edit { preferences ->
-            preferences[USER_ID] = user.loginResult?.userId.toString()
-            preferences[NAME] = user.loginResult?.name.toString()
             preferences[TOKEN] = user.loginResult?.token.toString()
         }
     }
 
+    suspend fun deleteSession() {
+        dataStore.edit { it.clear() }
+    }
+
     companion object {
-        private val USER_ID = stringPreferencesKey("session_id")
-        private val NAME = stringPreferencesKey("session_name")
         private val TOKEN = stringPreferencesKey("session_token")
 
         @Volatile

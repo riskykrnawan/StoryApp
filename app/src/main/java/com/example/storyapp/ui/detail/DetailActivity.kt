@@ -1,22 +1,22 @@
 package com.example.storyapp.ui.detail
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.MenuItem
 import android.view.View
-import androidx.annotation.StringRes
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.example.storyapp.R
-import com.example.storyapp.data.remote.response.ListStoryItem
 import com.example.storyapp.data.remote.response.Story
 import com.example.storyapp.databinding.ActivityDetailBinding
-import com.example.storyapp.databinding.ActivityHomeBinding
 import com.example.storyapp.helper.SessionPreferences
+import com.example.storyapp.helper.Utils.withDateFormat
 import com.example.storyapp.helper.ViewModelFactory
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("sessions")
@@ -33,6 +33,9 @@ class DetailActivity : AppCompatActivity() {
         _activityDetailBinding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
+        setSupportActionBar(binding?.toolbarMain)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         val pref = SessionPreferences.getInstance(dataStore)
         detailViewModel = obtainViewModel(this@DetailActivity, pref)
 
@@ -45,15 +48,37 @@ class DetailActivity : AppCompatActivity() {
 
         detailViewModel.story.observe(this) { story ->
             setStoryData(story)
+            playAnimation()
+            supportActionBar?.apply {
+                setDisplayHomeAsUpEnabled(true)
+                setDisplayShowTitleEnabled(true)
+                title = story.name
+            }
+        }
+
+        detailViewModel.errorMessage.observe(this) { message ->
+            Toast.makeText(this@DetailActivity, message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressedDispatcher.onBackPressed()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
     private fun setStoryData(story: Story) {
-        binding?.ivStory?.let {
+        binding?.ivDetailPhoto?.let {
             Glide.with(applicationContext).load(story.photoUrl).into(it)
         }
-        binding?.tvDescription?.text = story.description
-        binding?.tvName?.text = story.name
+        binding?.tvDetailName?.text = story.name
+        binding?.tvDetailCreatedAt?.text = story.createdAt.withDateFormat()
+        binding?.tvDetailDescription?.text = story.description
     }
 
     private fun showLoading(state: Boolean) {
@@ -70,5 +95,21 @@ class DetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_ID = "extra_id"
+    }
+
+    private fun playAnimation() {
+        val ivDetailPhoto =
+            ObjectAnimator.ofFloat(binding?.ivDetailPhoto, View.ALPHA, 1f).setDuration(300)
+        val tvDetailName =
+            ObjectAnimator.ofFloat(binding?.tvDetailName, View.ALPHA, 1f).setDuration(300)
+        val tvDetailCreatedAt =
+            ObjectAnimator.ofFloat(binding?.tvDetailCreatedAt, View.ALPHA, 1f).setDuration(300)
+        val tvDetailDescription =
+            ObjectAnimator.ofFloat(binding?.tvDetailDescription, View.ALPHA, 1f).setDuration(300)
+
+        AnimatorSet().apply {
+            playSequentially(ivDetailPhoto, tvDetailName, tvDetailCreatedAt, tvDetailDescription)
+            start()
+        }
     }
 }

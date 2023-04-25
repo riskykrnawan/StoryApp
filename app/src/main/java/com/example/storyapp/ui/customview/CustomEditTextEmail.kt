@@ -1,19 +1,12 @@
 package com.example.storyapp.ui.customview
 
 import android.content.Context
-import android.graphics.Canvas
-import android.provider.Settings.Global.getString
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
-import android.util.Patterns
-import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
 import com.example.storyapp.R
 import com.example.storyapp.helper.Validation
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
-
 
 class CustomEditTextEmail : AppCompatEditText {
 
@@ -44,9 +37,7 @@ class CustomEditTextEmail : AppCompatEditText {
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
+        context, attrs, defStyleAttr
     ) {
         init()
     }

@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/context_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
@@ -22,9 +23,10 @@
         tools:visibility="gone" />
 
     <ImageView
-        android:id="@+id/logo"
+        android:id="@+id/iv_logo"
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:alpha="0"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toTopOf="@id/text_input_layout_email"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,16 +39,18 @@
         android:layout_width="match_parent"
         android:layout_height="49dp"
         android:layout_marginTop="16dp"
+        android:alpha="0"
         android:text="@string/register_now"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo" />
+        app:layout_constraintTop_toBottomOf="@id/iv_logo" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_layout_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:alpha="0"
         android:hint="@string/email"
         app:errorEnabled="true"
         app:helperText="@string/supporting_email"
@@ -73,6 +77,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:alpha="0"
         android:hint="@string/password"
         app:errorEnabled="true"
         app:helperText="@string/supporting_password"
@@ -98,16 +103,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:alpha="0"
         android:enabled="false"
         android:text="@string/login"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_input_layout_password" />
-
-    <View
-        android:id="@+id/context_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

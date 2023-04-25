@@ -1,24 +1,24 @@
 package com.example.storyapp.ui.home
 
 import android.app.Application
-import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import com.example.storyapp.data.remote.response.ListStoryItem
 import com.example.storyapp.data.remote.response.StoriesResponse
 import com.example.storyapp.data.remote.retrofit.ApiConfig
 import com.example.storyapp.helper.SessionPreferences
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeViewModel(private val pref: SessionPreferences) : ViewModel() {
+class HomeViewModel(private val application: Application, private val pref: SessionPreferences) :
+    ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -36,22 +36,31 @@ class HomeViewModel(private val pref: SessionPreferences) : ViewModel() {
 
         client.enqueue(object : Callback<StoriesResponse> {
             override fun onResponse(
-                call: Call<StoriesResponse>,
-                response: Response<StoriesResponse>
+                call: Call<StoriesResponse>, response: Response<StoriesResponse>
             ) {
-                _isLoading.value = false
-                _stories.value = response.body()?.listStory
-                _statusCode.value = response.code()
+                if (response.isSuccessful) {
+                    _isLoading.value = false
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                        _stories.value = response.body()?.listStory
+                        _statusCode.value = response.code()
+                    } else {
+                        _isLoading.value = false
+                        Toast.makeText(application, response.message(), Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
 
             override fun onFailure(call: Call<StoriesResponse>, t: Throwable) {
                 _isLoading.value = false
-                Log.e(TAG, "onFailure: ${t.message}")
+                Toast.makeText(application, t.message, Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    companion object {
-        private const val TAG = "HomeViewModel"
+    fun deleteSession() {
+        viewModelScope.launch {
+            pref.deleteSession()
+        }
     }
 }

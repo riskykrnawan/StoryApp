@@ -1,8 +1,6 @@
 package com.example.storyapp.data.remote.response
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
 
 data class StoriesResponse(
 

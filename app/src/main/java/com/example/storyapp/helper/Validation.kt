@@ -4,8 +4,7 @@ import android.util.Patterns
 
 object Validation {
     fun isValidEmail(email: CharSequence): Boolean {
-        return email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email)
-            .matches()
+        return email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     fun isValidForm(email: String, password: String): Boolean {

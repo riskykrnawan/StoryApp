@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    id 'kotlin-parcelize'
 }
 
 android {
@@ -50,6 +49,12 @@ dependencies {
     implementation libs.androidx.lifecycle.viewmodel.ktx
     implementation libs.androidx.lifecycle.livedata.ktx
     implementation libs.glide
+    implementation libs.androidx.camera.camera2
+    implementation libs.androidx.camera.lifecycle
+    implementation libs.androidx.camera.view
+    implementation libs.androidx.core.splashscreen
+    implementation libs.androidx.activity.ktx
+
 
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.ext.junit

@@ -15,7 +15,25 @@
     <string name="splash_image">Splash Image</string>
     <string name="registration_success">Congratulations! Your registration is successful</string>
     <string name="registration_failed">Registration failed. This email is already registered.</string>
-    <string name="login_failed">Login failed. Please check your email and password..</string>
+    <string name="login_failed">Login failed. Please check your email and password.</string>
     <string name="photo_story">Photo Story</string>
-    <string name="descripion">Descripion</string>
+    <string name="upload_camera">Camera</string>
+    <string name="upload_gallery">Gallery</string>
+    <string name="description">Description</string>
+    <string name="submit">Submit</string>
+    <string name="add_story">Add Story</string>
+    <string name="supporting_description">Enter descriptions of your story</string>
+    <string name="permission_not_granted">Permission not granted</string>
+    <string name="logout">Logout</string>
+    <string name="create_story">Create story</string>
+    <string name="created_at">Created at</string>
+    <string name="the_description_cannot_be_empty">The description cannot be empty</string>
+    <string name="upload_photo_story">Upload a photo of your story</string>
+    <string name="the_description_and_the_photo_cannot_be_empty">The description and the photo cannot be empty</string>
+    <string name="email_is_invalid">%1$s: Email is invalid, use another email</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="failed_to_take_picture">Failed to take picture</string>
+    <string name="failed_to_set_up_the_camera">Failed to set up the camera</string>
 </resources>

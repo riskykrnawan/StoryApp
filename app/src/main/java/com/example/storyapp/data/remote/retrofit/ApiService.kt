@@ -5,7 +5,6 @@ import com.example.storyapp.data.local.UserModelRegister
 import com.example.storyapp.data.remote.response.DetailStoryResponse
 import com.example.storyapp.data.remote.response.LoginResponse
 import com.example.storyapp.data.remote.response.StoriesResponse
-import com.example.storyapp.data.remote.response.Story
 import com.example.storyapp.data.remote.response.SuccessResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -13,7 +12,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Headers
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -44,10 +43,11 @@ interface ApiService {
         @Path("id") id: String,
     ): Call<DetailStoryResponse>
 
+    @Multipart
     @POST("/v1/stories")
     fun postStory(
-        @Part file: MultipartBody.Part,
         @Header("Authorization") authorization: String,
+        @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody,
-    ): Call<DetailStoryResponse>
+    ): Call<SuccessResponse>
 }

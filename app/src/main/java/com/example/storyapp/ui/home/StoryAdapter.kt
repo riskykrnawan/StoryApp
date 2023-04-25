@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.storyapp.data.remote.response.ListStoryItem
 import com.example.storyapp.databinding.StoryCardBinding
+import com.example.storyapp.helper.Utils.withDateFormat
 import com.example.storyapp.ui.detail.DetailActivity
 
 class StoryAdapter(private val listStory: ArrayList<ListStoryItem>) :
@@ -25,8 +26,12 @@ class StoryAdapter(private val listStory: ArrayList<ListStoryItem>) :
     override fun onBindViewHolder(holder: StoryAdapter.ViewHolder, position: Int) {
         val story = listStory[position]
 
-        Glide.with(holder.itemView.context).load(story.photoUrl).into(holder.ivStory)
-        holder.tvName.text = story.name
+        Glide.with(holder.itemView.context).load(story.photoUrl).into(holder.ivItemPhoto)
+        holder.tvItemName.text = story.name
+        holder.tvItemCreatedAt.text = story.createdAt.withDateFormat()
+        holder.tvItemDescription.text =
+            if (story.description.count() > 20) "${story.description.substring(0, 20)} ...."
+            else story.description
 
         holder.storyCard.setOnClickListener {
             val intent = Intent(holder.itemView.context, DetailActivity::class.java)
@@ -38,8 +43,10 @@ class StoryAdapter(private val listStory: ArrayList<ListStoryItem>) :
     override fun getItemCount() = listStory.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val ivStory = binding.ivStory
-        val tvName = binding.tvName
+        val ivItemPhoto = binding.ivItemPhoto
+        val tvItemName = binding.tvItemName
+        val tvItemCreatedAt = binding.tvItemCreatedAt
+        val tvItemDescription = binding.tvItemDescription
         val storyCard = binding.storyCard
     }
 }

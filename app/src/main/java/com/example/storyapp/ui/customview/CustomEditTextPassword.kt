@@ -1,18 +1,11 @@
 package com.example.storyapp.ui.customview
 
 import android.content.Context
-import android.graphics.Canvas
 import android.text.Editable
-import android.text.InputType.TYPE_CLASS_TEXT
-import android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
 import android.text.TextWatcher
 import android.util.AttributeSet
-import android.util.Patterns
-import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
 import com.example.storyapp.R
-import com.google.android.material.textfield.TextInputLayout
 
 
 class CustomEditTextPassword : AppCompatEditText {
@@ -44,9 +37,7 @@ class CustomEditTextPassword : AppCompatEditText {
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
+        context, attrs, defStyleAttr
     ) {
         init()
     }
